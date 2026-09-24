@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Store__c</fullName>
+    <description>Store where the sales performance was recorded.</description>
+    <label>Store</label>
+    <referenceTo>Store__c</referenceTo>
+    <relationshipLabel>Sales Performances</relationshipLabel>
+    <relationshipName>SalesPerformances</relationshipName>
+    <type>Lookup</type>
+</CustomField>
