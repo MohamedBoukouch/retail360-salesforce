@@ -1,13 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+
     <deploymentStatus>Deployed</deploymentStatus>
+
     <label>Recommendation</label>
+    <pluralLabel>Recommendations</pluralLabel>
+
     <nameField>
         <label>Recommendation Number</label>
         <type>AutoNumber</type>
         <displayFormat>REC-{00000}</displayFormat>
         <startingNumber>1</startingNumber>
     </nameField>
-    <pluralLabel>Recommendations</pluralLabel>
+
     <sharingModel>ReadWrite</sharingModel>
+
+    <!-- Customer → standard Contact -->
+    <fields>
+        <fullName>Customer__c</fullName>
+        <label>Customer</label>
+        <type>Lookup</type>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Recommendations</relationshipLabel>
+        <relationshipName>Recommendations</relationshipName>
+    </fields>
+
+    <!-- Product → standard Product2 -->
+    <fields>
+        <fullName>Product__c</fullName>
+        <label>Product</label>
+        <type>Lookup</type>
+        <referenceTo>Product2</referenceTo>
+        <relationshipLabel>Recommendations</relationshipLabel>
+        <relationshipName>Recommendations</relationshipName>
+    </fields>
+
+    <!-- Sales Representative → standard User -->
+    <fields>
+        <fullName>Sales_Rep__c</fullName>
+        <label>Sales Rep</label>
+        <type>Lookup</type>
+        <referenceTo>User</referenceTo>
+        <relationshipLabel>Recommendations</relationshipLabel>
+        <relationshipName>Recommendations</relationshipName>
+    </fields>
+
+    <fields>
+        <fullName>Confidence__c</fullName>
+        <label>Confidence</label>
+        <type>Percent</type>
+        <precision>5</precision>
+        <scale>2</scale>
+    </fields>
+
+    <fields>
+        <fullName>Reason__c</fullName>
+        <label>Reason</label>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+        <length>32768</length>
+    </fields>
+
+    <fields>
+        <fullName>Status__c</fullName>
+        <label>Status</label>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+
+                <value>
+                    <fullName>PENDING</fullName>
+                    <default>true</default>
+                    <label>Pending</label>
+                </value>
+
+                <value>
+                    <fullName>ACCEPTED</fullName>
+                    <default>false</default>
+                    <label>Accepted</label>
+                </value>
+
+                <value>
+                    <fullName>REJECTED</fullName>
+                    <default>false</default>
+                    <label>Rejected</label>
+                </value>
+
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+
 </CustomObject>

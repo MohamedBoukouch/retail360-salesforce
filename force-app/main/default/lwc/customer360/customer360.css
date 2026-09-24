@@ -1,0 +1,99 @@
+.customer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.customer-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.customer-account {
+    color: #706e6b;
+    margin-top: 0.25rem;
+}
+
+.info-card {
+    padding: 1rem;
+    border: 1px solid #dddbda;
+    border-radius: 0.5rem;
+    background: #ffffff;
+}
+
+.label {
+    display: block;
+    font-size: 0.75rem;
+    color: #706e6b;
+    margin-bottom: 0.25rem;
+}
+
+.value {
+    display: block;
+    font-weight: 600;
+}
+
+.metric-card {
+    padding: 1.25rem;
+    border: 1px solid #dddbda;
+    border-radius: 0.5rem;
+    text-align: center;
+    background: #ffffff;
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.metric-label {
+    color: #706e6b;
+    margin-top: 0.25rem;
+}
+
+.section {
+    padding: 1.25rem;
+    border-top: 1px solid #dddbda;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.empty-message {
+    color: #706e6b;
+    padding: 1rem 0;
+}
+
+.recommendation-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.recommendation-card {
+    border: 1px solid #dddbda;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.recommendation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.confidence {
+    margin-top: 0.5rem;
+    font-weight: 600;
+}
+
+.reason {
+    margin-top: 0.5rem;
+    color: #444;
+}

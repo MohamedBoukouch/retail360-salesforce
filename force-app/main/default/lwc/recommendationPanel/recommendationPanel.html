@@ -1,0 +1,55 @@
+<template>
+    <lightning-card title="Product Recommendations" icon-name="custom:product">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading recommendations"></lightning-spinner>
+        </template>
+
+        <div class="slds-p-around_medium">
+            <template if:true={error}>
+                <div class="slds-notify slds-notify__body slds-theme_error slds-m-bottom_small">
+                    <span>{errorMessage}</span>
+                </div>
+            </template>
+
+            <template if:false={isLoading}>
+                <div class="slds-grid slds-grid_align-end slds-m-bottom_small">
+                    <lightning-combobox
+                        name="filter"
+                        label="Filter by Status"
+                        value={filterValue}
+                        options={statusOptions}
+                        onchange={handleFilterChange}
+                        class="slds-size_1-of-3">
+                    </lightning-combobox>
+                </div>
+
+                <template if:true={hasRecommendations}>
+                    <div class="recommendation-list">
+                        <template for:each={filteredRecommendations} for:item="rec">
+                            <div class="recommendation-card slds-m-bottom_small" key={rec.Id}>
+                                <div class="recommendation-header">
+                                    <strong>{rec.productName}</strong>
+                                    <span class={statusClass}>{rec.Status__c}</span>
+                                </div>
+
+                                <div class="confidence slds-text-color_weak">
+                                    Confidence: {rec.Confidence__c}%
+                                </div>
+
+                                <div class="reason slds-m-top_small">
+                                    {rec.Reason__c}
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+
+                <template if:false={hasRecommendations}>
+                    <p class="empty-message slds-text-color_weak">
+                        No recommendations found.
+                    </p>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

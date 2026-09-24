@@ -1,0 +1,59 @@
+<template>
+    <lightning-card title="Sales Performance" icon-name="standard:performance">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading performance data"></lightning-spinner>
+        </template>
+
+        <div class="slds-p-around_medium">
+            <template if:true={error}>
+                <div class="slds-notify slds-notify__body slds-theme_error slds-m-bottom_small">
+                    <span>{errorMessage}</span>
+                </div>
+            </template>
+
+            <template if:false={isLoading}>
+                <template if:true={hasPerformances}>
+                    <div class="table-container">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Sales Rep</th>
+                                    <th scope="col">Store</th>
+                                    <th scope="col">Period</th>
+                                    <th scope="col">Sales Amount</th>
+                                    <th scope="col">Target</th>
+                                    <th scope="col">Achievement</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={performances} for:item="perf">
+                                    <tr key={perf.id}>
+                                        <td>{perf.salesRepName}</td>
+                                        <td>{perf.storeName}</td>
+                                        <td>{perf.period}</td>
+                                        <td>{formattedCurrency(perf.salesAmount)}</td>
+                                        <td>{formattedCurrency(perf.target)}</td>
+                                        <td>
+                                            <lightning-progress-bar
+                                                value={perf.achievementPercent}
+                                                max-value="100"
+                                                size="small">
+                                            </lightning-progress-bar>
+                                            <span class="slds-m-left_small">{perf.achievementPercent}%</span>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+
+                <template if:false={hasPerformances}>
+                    <p class="empty-message slds-text-color_weak">
+                        No performance data found.
+                    </p>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

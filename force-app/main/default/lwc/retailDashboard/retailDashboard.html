@@ -1,0 +1,142 @@
+<template>
+    <lightning-card title="Retail Dashboard" icon-name="custom:store">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading dashboard"></lightning-spinner>
+        </template>
+
+        <template if:false={isLoading}>
+            <div class="slds-p-around_medium">
+                <template if:true={error}>
+                    <div class="slds-notify slds-notify__body slds-theme_error slds-m-bottom_small">
+                        <span>{errorMessage}</span>
+                    </div>
+                </template>
+
+                <template if:false={error}>
+                    <!-- Stores Section -->
+                    <div class="section">
+                        <div class="section-title">
+                            Stores
+                        </div>
+
+                        <template if:true={hasStores}>
+                            <div class="table-container">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Store</th>
+                                            <th scope="col">City</th>
+                                            <th scope="col">Region</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Manager</th>
+                                            <th scope="col">Monthly Target</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={stores} for:item="store">
+                                            <tr key={store.id}>
+                                                <td>{store.name}</td>
+                                                <td>{store.city}</td>
+                                                <td>{store.region}</td>
+                                                <td>{store.status}</td>
+                                                <td>{store.managerName}</td>
+                                                <td>{formattedCurrency(store.monthlyTarget)}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </template>
+
+                        <template if:false={hasStores}>
+                            <p class="empty-message">
+                                No stores found.
+                            </p>
+                        </template>
+                    </div>
+
+                    <!-- Recent Visits Section -->
+                    <div class="section">
+                        <div class="section-title">
+                            Recent Visits
+                        </div>
+
+                        <template if:true={hasRecentVisits}>
+                            <div class="table-container">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Customer</th>
+                                            <th scope="col">Sales Rep</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Duration</th>
+                                            <th scope="col">Purchase</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={recentVisits} for:item="visit">
+                                            <tr key={visit.id}>
+                                                <td>{visit.customerName}</td>
+                                                <td>{visit.salesRepName}</td>
+                                                <td>{visit.visitStatus}</td>
+                                                <td>{visit.duration} min</td>
+                                                <td>
+                                                    <template if:true={visit.purchaseMade}>
+                                                        Yes
+                                                    </template>
+                                                    <template if:false={visit.purchaseMade}>
+                                                        No
+                                                    </template>
+                                                </td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </template>
+
+                        <template if:false={hasRecentVisits}>
+                            <p class="empty-message">
+                                No recent visits found.
+                            </p>
+                        </template>
+                    </div>
+
+                    <!-- Recent Recommendations Section -->
+                    <div class="section">
+                        <div class="section-title">
+                            Recent Recommendations
+                        </div>
+
+                        <template if:true={hasRecentRecommendations}>
+                            <div class="recommendation-list">
+                                <template for:each={recentRecommendations} for:item="rec">
+                                    <div class="recommendation-card" key={rec.id}>
+                                        <div class="recommendation-header">
+                                            <strong>{rec.productName}</strong>
+                                            <span>{rec.status}</span>
+                                        </div>
+
+                                        <div class="confidence">
+                                            Confidence: {rec.confidence}%
+                                        </div>
+
+                                        <div class="reason">
+                                            {rec.reason}
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
+                        <template if:false={hasRecentRecommendations}>
+                            <p class="empty-message">
+                                No recommendations found.
+                            </p>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </lightning-card>
+</template>

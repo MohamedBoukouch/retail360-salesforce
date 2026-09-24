@@ -1,0 +1,33 @@
+.table-container {
+    overflow-x: auto;
+}
+
+.empty-message {
+    color: #706e6b;
+    padding: 1rem 0;
+}
+
+.slds-p-around_medium {
+    padding: 1.25rem !important;
+}
+
+.slds-m-bottom_small {
+    margin-bottom: 0.5rem !important;
+}
+
+.slds-theme_error {
+    --lwc-brandAccessible: var(--lwc-colorTextError);
+}
+
+.slds-notify__body {
+    padding: 0.75rem 1rem;
+    border-radius: 0.25rem;
+}
+
+.slds-m-left_small {
+    margin-left: 0.5rem !important;
+}
+
+.slds-text-color_weak {
+    color: #706e6b;
+}

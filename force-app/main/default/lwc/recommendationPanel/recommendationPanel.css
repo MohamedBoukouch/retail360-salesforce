@@ -1,0 +1,46 @@
+.recommendation-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.recommendation-card {
+    border: 1px solid #dddbda;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.recommendation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.confidence {
+    margin-top: 0.5rem;
+    font-weight: 600;
+}
+
+.reason {
+    margin-top: 0.5rem;
+    color: #444;
+}
+
+.slds-m-top_small {
+    margin-top: 0.5rem !important;
+}
+
+.slds-m-bottom_small {
+    margin-bottom: 0.5rem !important;
+}
+
+.slds-text-color_weak {
+    color: #706e6b;
+}
+
+.slds-p-around_medium {
+    padding: 1.25rem !important;
+}
+
+.empty-message {
+    padding: 1rem 0;
+}

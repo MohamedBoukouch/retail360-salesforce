@@ -1,0 +1,24 @@
+.slds-p-around_medium {
+    padding: 1.25rem !important;
+}
+
+.slds-m-bottom_small {
+    margin-bottom: 0.5rem !important;
+}
+
+.slds-m-top_medium {
+    margin-top: 1.25rem !important;
+}
+
+.slds-m-right_small {
+    margin-right: 0.5rem !important;
+}
+
+.slds-theme_error {
+    --lwc-brandAccessible: var(--lwc-colorTextError);
+}
+
+.slds-notify__body {
+    padding: 0.75rem 1rem;
+    border-radius: 0.25rem;
+}

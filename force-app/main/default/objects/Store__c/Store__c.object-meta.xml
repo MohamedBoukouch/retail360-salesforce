@@ -1,11 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+
     <deploymentStatus>Deployed</deploymentStatus>
+
     <label>Store</label>
+    <pluralLabel>Stores</pluralLabel>
+
     <nameField>
         <label>Store Name</label>
         <type>Text</type>
+        <length>80</length>
     </nameField>
-    <pluralLabel>Stores</pluralLabel>
+
     <sharingModel>ReadWrite</sharingModel>
+
+    <!-- Unique Store Code -->
+    <fields>
+        <fullName>Store_Code__c</fullName>
+        <label>Store Code</label>
+        <type>Text</type>
+        <length>30</length>
+        <unique>true</unique>
+        <externalId>true</externalId>
+    </fields>
+
+    <fields>
+        <fullName>City__c</fullName>
+        <label>City</label>
+        <type>Text</type>
+        <length>100</length>
+    </fields>
+
+    <fields>
+        <fullName>Region__c</fullName>
+        <label>Region</label>
+        <type>Text</type>
+        <length>100</length>
+    </fields>
+
+    <!-- Manager → standard User -->
+    <fields>
+        <fullName>Manager__c</fullName>
+        <label>Manager</label>
+        <type>Lookup</type>
+        <referenceTo>User</referenceTo>
+        <relationshipLabel>Managed Stores</relationshipLabel>
+        <relationshipName>ManagedStores</relationshipName>
+    </fields>
+
+    <fields>
+        <fullName>Employees__c</fullName>
+        <label>Employees</label>
+        <type>Number</type>
+        <precision>8</precision>
+        <scale>0</scale>
+    </fields>
+
+    <fields>
+        <fullName>Monthly_Target__c</fullName>
+        <label>Monthly Target</label>
+        <type>Currency</type>
+        <precision>16</precision>
+        <scale>2</scale>
+    </fields>
+
+    <fields>
+        <fullName>Status__c</fullName>
+        <label>Status</label>
+        <type>Picklist</type>
+
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+
+                <value>
+                    <fullName>ACTIVE</fullName>
+                    <default>true</default>
+                    <label>Active</label>
+                </value>
+
+                <value>
+                    <fullName>INACTIVE</fullName>
+                    <default>false</default>
+                    <label>Inactive</label>
+                </value>
+
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+
 </CustomObject>

@@ -1,0 +1,128 @@
+<template>
+
+    <lightning-card
+        title="Store Performance"
+        icon-name="standard:store">
+
+        <div class="slds-p-around_medium">
+
+            <template if:true={hasError}>
+
+                <div class="slds-text-color_error">
+                    Unable to load store performance data.
+                </div>
+
+            </template>
+
+            <template if:true={hasStores}>
+
+                <div class="slds-scrollable_x">
+
+                    <table
+                        class="slds-table
+                               slds-table_cell-buffer
+                               slds-table_bordered">
+
+                        <thead>
+                            <tr class="slds-line-height_reset">
+
+                                <th scope="col">
+                                    <div class="slds-truncate">
+                                        Store
+                                    </div>
+                                </th>
+
+                                <th scope="col">
+                                    <div class="slds-truncate">
+                                        Code
+                                    </div>
+                                </th>
+
+                                <th scope="col">
+                                    <div class="slds-truncate">
+                                        City
+                                    </div>
+                                </th>
+
+                                <th scope="col">
+                                    <div class="slds-truncate">
+                                        Employees
+                                    </div>
+                                </th>
+
+                                <th scope="col">
+                                    <div class="slds-truncate">
+                                        Monthly Target
+                                    </div>
+                                </th>
+
+                                <th scope="col">
+                                    <div class="slds-truncate">
+                                        Status
+                                    </div>
+                                </th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            <template
+                                for:each={stores}
+                                for:item="store">
+
+                                <tr key={store.Id}>
+
+                                    <td>
+                                        {store.Name}
+                                    </td>
+
+                                    <td>
+                                        {store.Store_Code__c}
+                                    </td>
+
+                                    <td>
+                                        {store.City__c}
+                                    </td>
+
+                                    <td>
+                                        {store.Employees__c}
+                                    </td>
+
+                                    <td>
+                                        {store.Monthly_Target__c}
+                                    </td>
+
+                                    <td>
+                                        {store.Status__c}
+                                    </td>
+
+                                </tr>
+
+                            </template>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </template>
+
+            <template if:false={hasStores}>
+
+                <template if:false={hasError}>
+
+                    <p>
+                        No active stores found.
+                    </p>
+
+                </template>
+
+            </template>
+
+        </div>
+
+    </lightning-card>
+
+</template>
