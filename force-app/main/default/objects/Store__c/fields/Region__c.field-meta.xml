@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Region__c</fullName>
+    <description>Administrative region where the store is located.</description>
+    <label>Region</label>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Souss-Massa</fullName>
+                <default>false</default>
+                <label>Souss-Massa</label>
+            </value>
+            <value>
+                <fullName>Casablanca-Settat</fullName>
+                <default>false</default>
+                <label>Casablanca-Settat</label>
+            </value>
+            <value>
+                <fullName>Rabat-Salé-Kénitra</fullName>
+                <default>false</default>
+                <label>Rabat-Salé-Kénitra</label>
+            </value>
+            <value>
+                <fullName>Marrakech-Safi</fullName>
+                <default>false</default>
+                <label>Marrakech-Safi</label>
+            </value>
+            <value>
+                <fullName>Fès-Meknès</fullName>
+                <default>false</default>
+                <label>Fès-Meknès</label>
+            </value>
+            <value>
+                <fullName>Tanger-Tétouan-Al Hoceïma</fullName>
+                <default>false</default>
+                <label>Tanger-Tétouan-Al Hoceïma</label>
+            </value>
+            <value>
+                <fullName>Oriental</fullName>
+                <default>false</default>
+                <label>Oriental</label>
+            </value>
+            <value>
+                <fullName>Béni Mellal-Khénifra</fullName>
+                <default>false</default>
+                <label>Béni Mellal-Khénifra</label>
+            </value>
+            <value>
+                <fullName>Drâa-Tafilalet</fullName>
+                <default>false</default>
+                <label>Drâa-Tafilalet</label>
+            </value>
+            <value>
+                <fullName>Guelmim-Oued Noun</fullName>
+                <default>false</default>
+                <label>Guelmim-Oued Noun</label>
+            </value>
+            <value>
+                <fullName>Laâyoune-Sakia El Hamra</fullName>
+                <default>false</default>
+                <label>Laâyoune-Sakia El Hamra</label>
+            </value>
+            <value>
+                <fullName>Dakhla-Oued Ed-Dahab</fullName>
+                <default>false</default>
+                <label>Dakhla-Oued Ed-Dahab</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
