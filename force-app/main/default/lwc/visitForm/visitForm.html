@@ -14,16 +14,70 @@
             <lightning-input
                 label="Store"
                 value={storeName}
-                disabled
-                class="slds-m-bottom_small">
+                onchange={handleStoreChange}
+                class="slds-m-bottom_small"
+                data-field="store">
             </lightning-input>
+
+            <div class="slds-combobox_container slds-m-bottom_small" if:true={showStoreOptions}>
+                <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
+                    <div class="slds-form-element">
+                        <div class="slds-input-has-icon">
+                            <lightning-input
+                                label="Search Store"
+                                value={storeSearchTerm}
+                                onchange={handleStoreSearch}
+                                placeholder="Type to search stores...">
+                            </lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-dropdown slds-dropdown--visible">
+                        <ul class="slds-dropdown__list slds-autocombobox__listbox" role="listbox">
+                            <template for:each={storeOptions} for:item="store">
+                                <li role="option" key={store.Id}>
+                                    <a class="slds-dropdown__item_action slds-text-link" onclick={handleStoreSelect} data-id={store.Id} data-name={store.Name}>
+                                        {store.Name}
+                                    </a>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
             <lightning-input
                 label="Customer"
                 value={customerName}
-                disabled
-                class="slds-m-bottom_small">
+                onchange={handleCustomerChange}
+                class="slds-m-bottom_small"
+                data-field="customer">
             </lightning-input>
+
+            <div class="slds-combobox_container slds-m-bottom_small" if:true={showCustomerOptions}>
+                <div class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click">
+                    <div class="slds-form-element">
+                        <div class="slds-input-has-icon">
+                            <lightning-input
+                                label="Search Customer"
+                                value={customerSearchTerm}
+                                onchange={handleCustomerSearch}
+                                placeholder="Type to search customers...">
+                            </lightning-input>
+                        </div>
+                    </div>
+                    <div class="slds-dropdown slds-dropdown--visible">
+                        <ul class="slds-dropdown__list slds-autocombobox__listbox" role="listbox">
+                            <template for:each={customerOptions} for:item="cust">
+                                <li role="option" key={cust.Id}>
+                                    <a class="slds-dropdown__item_action slds-text-link" onclick={handleCustomerSelect} data-id={cust.Id} data-name={cust.Name}>
+                                        {cust.Name}
+                                    </a>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
             <lightning-input
                 type="datetime"

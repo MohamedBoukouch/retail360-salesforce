@@ -51,6 +51,8 @@ private class CustomerVisitControllerTest {
         System.assertEquals('COMPLETED', wrapper.visitStatus);
         System.assertEquals(60, wrapper.duration);
         System.assertEquals(false, wrapper.purchaseMade);
+        System.assertNotEquals(null, wrapper.storeId);
+        System.assertNotEquals(null, wrapper.customerId);
     }
 
     @IsTest
@@ -65,9 +67,13 @@ private class CustomerVisitControllerTest {
     @IsTest
     static void testSaveVisitUpdatesRecord() {
         CustomerVisit__c visit = [SELECT Id FROM CustomerVisit__c LIMIT 1];
+        Store__c store = [SELECT Id FROM Store__c LIMIT 1];
+        Contact contact = [SELECT Id FROM Contact LIMIT 1];
 
         Id resultId = CustomerVisitController.saveVisit(
             visit.Id,
+            store.Id,
+            contact.Id,
             DateTime.newInstance(2025, 1, 1, 9, 0, 0),
             DateTime.newInstance(2025, 1, 1, 10, 0, 0),
             60,
@@ -78,11 +84,49 @@ private class CustomerVisitControllerTest {
         System.assertEquals(visit.Id, resultId);
 
         CustomerVisit__c savedVisit = [
-            SELECT Visit_Status__c, Purchase_Made__c, Duration__c
+            SELECT Visit_Status__c, Purchase_Made__c, Duration__c, Store__c, Customer__c
             FROM CustomerVisit__c
             WHERE Id = :resultId
         ];
         System.assertEquals('COMPLETED', savedVisit.Visit_Status__c);
         System.assertEquals(true, savedVisit.Purchase_Made__c);
+        System.assertEquals(store.Id, savedVisit.Store__c);
+        System.assertEquals(contact.Id, savedVisit.Customer__c);
+    }
+
+    @IsTest
+    static void testSearchStoresWithTerm() {
+        List<Store__c> stores = CustomerVisitController.searchStores('Test');
+        System.assert(!stores.isEmpty());
+    }
+
+    @IsTest
+    static void testSearchStoresEmpty() {
+        List<Store__c> stores = CustomerVisitController.searchStores('');
+        System.assert(!stores.isEmpty());
+    }
+
+    @IsTest
+    static void testSearchStoresNull() {
+        List<Store__c> stores = CustomerVisitController.searchStores(null);
+        System.assert(!stores.isEmpty());
+    }
+
+    @IsTest
+    static void testSearchCustomersWithTerm() {
+        List<Contact> customers = CustomerVisitController.searchCustomers('Test');
+        System.assert(!customers.isEmpty());
+    }
+
+    @IsTest
+    static void testSearchCustomersEmpty() {
+        List<Contact> customers = CustomerVisitController.searchCustomers('');
+        System.assert(!customers.isEmpty());
+    }
+
+    @IsTest
+    static void testSearchCustomersNull() {
+        List<Contact> customers = CustomerVisitController.searchCustomers(null);
+        System.assert(!customers.isEmpty());
     }
 }

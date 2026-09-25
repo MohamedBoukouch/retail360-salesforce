@@ -2,11 +2,25 @@
   "packageDirectories": [
     {
       "path": "force-app",
-      "default": true
+      "default": true,
+      "package": "Retail360",
+      "versionName": "ver 1.0",
+      "versionNumber": "1.0.0.NEXT",
+      "dependencies": []
     }
   ],
   "name": "retail360-salesforce",
   "namespace": "",
+  "sfdx-project-remotes": {
+    "DevHub": {
+      "track": false,
+      "gitConfirmation": "append"
+    }
+  },
+  "sourceApiVersion": "67.0",
+  "targetOrgUrl": "https://login.salesforce.com",
+  "useSandboxInSourceFormat": false,
+  "dependencies": [],
   "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "67.0"
+  "gitValidation": {}
 }

@@ -1,5 +1,7 @@
-import { LightningElement, api, wire } from 'lwc';
+import { LightningElement, api, wire, track } from 'lwc';
 import getVisit from '@salesforce/apex/CustomerVisitController.getVisit';
+import searchStores from '@salesforce/apex/CustomerVisitController.searchStores';
+import searchCustomers from '@salesforce/apex/CustomerVisitController.searchCustomers';
 import saveVisit from '@salesforce/apex/CustomerVisitController.saveVisit';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
@@ -9,37 +11,92 @@ export default class VisitForm extends LightningElement {
     error;
     isLoading = false;
 
+    storeId = null;
     storeName = '';
+    storeSearchTerm = '';
+    storeOptions = [];
+    showStoreOptions = false;
+
+    customerId = null;
     customerName = '';
+    customerSearchTerm = '';
+    customerOptions = [];
+    showCustomerOptions = false;
+
     checkIn = '';
     checkOut = '';
     duration = null;
     purchaseMade = false;
-    visitStatus = 'Scheduled';
+    visitStatus = 'IN_PROGRESS';
 
     visitStatusOptions = [
-        { label: 'Scheduled', value: 'Scheduled' },
-        { label: 'In Progress', value: 'In Progress' },
-        { label: 'Completed', value: 'Completed' },
-        { label: 'Cancelled', value: 'Cancelled' }
+        { label: 'In Progress', value: 'IN_PROGRESS' },
+        { label: 'Completed', value: 'COMPLETED' },
+        { label: 'Cancelled', value: 'CANCELLED' }
     ];
 
     @wire(getVisit, { visitId: '$recordId' })
     wiredVisit({ error, data }) {
         if (data) {
+            this.storeId = data.storeId || null;
             this.storeName = data.storeName || '';
+            this.customerId = data.customerId || null;
             this.customerName = data.customerName || '';
             this.checkIn = data.checkIn || '';
             this.checkOut = data.checkOut || '';
             this.duration = data.duration || null;
             this.purchaseMade = data.purchaseMade || false;
-            this.visitStatus = data.visitStatus || 'Scheduled';
+            this.visitStatus = data.visitStatus || 'IN_PROGRESS';
             this.error = undefined;
         } else if (error) {
             this.error = error.body?.message || 'Error loading visit data';
             this.storeName = '';
             this.customerName = '';
         }
+    }
+
+    handleStoreChange(event) {
+        this.storeSearchTerm = event.detail.value;
+        this.showStoreOptions = this.storeSearchTerm.length >= 2;
+        if (this.showStoreOptions) {
+            searchStores({ searchTerm: this.storeSearchTerm })
+                .then(result => {
+                    this.storeOptions = result;
+                })
+                .catch(error => {
+                    this.storeOptions = [];
+                });
+        }
+    }
+
+    handleStoreSelect(event) {
+        this.storeId = event.currentTarget.dataset.id;
+        this.storeName = event.currentTarget.dataset.name;
+        this.storeSearchTerm = '';
+        this.showStoreOptions = false;
+        this.storeOptions = [];
+    }
+
+    handleCustomerChange(event) {
+        this.customerSearchTerm = event.detail.value;
+        this.showCustomerOptions = this.customerSearchTerm.length >= 2;
+        if (this.showCustomerOptions) {
+            searchCustomers({ searchTerm: this.customerSearchTerm })
+                .then(result => {
+                    this.customerOptions = result;
+                })
+                .catch(error => {
+                    this.customerOptions = [];
+                });
+        }
+    }
+
+    handleCustomerSelect(event) {
+        this.customerId = event.currentTarget.dataset.id;
+        this.customerName = event.currentTarget.dataset.name;
+        this.customerSearchTerm = '';
+        this.showCustomerOptions = false;
+        this.customerOptions = [];
     }
 
     handleCheckInChange(event) {
@@ -68,6 +125,8 @@ export default class VisitForm extends LightningElement {
 
         saveVisit({
             visitId: this.recordId,
+            storeId: this.storeId,
+            customerId: this.customerId,
             checkIn: this.checkIn,
             checkOut: this.checkOut,
             duration: this.duration,
@@ -107,11 +166,13 @@ export default class VisitForm extends LightningElement {
     }
 
     handleReset() {
+        this.storeName = '';
+        this.customerName = '';
         this.checkIn = '';
         this.checkOut = '';
         this.duration = null;
         this.purchaseMade = false;
-        this.visitStatus = 'Scheduled';
+        this.visitStatus = 'IN_PROGRESS';
         this.error = undefined;
     }
 }

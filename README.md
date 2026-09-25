@@ -1,59 +1,132 @@
-# Salesforce DX Project
+# Retail360
 
-Salesforce DX is a development approach that brings source-driven development, team collaboration, and continuous integration to the Salesforce Platform. Instead of working directly in an org through a web browser, you work with metadata as source files in a local DX project, track changes in version control, and deploy through automated processes.
+**Salesforce Retail Operations Platform** — a portfolio project demonstrating Salesforce development combined with good software engineering practices.
 
-This project template gets you started with the tools and structure you need to build Salesforce applications using source control, scratch orgs, and the Salesforce CLI.
+## Overview
 
-## Prerequisites
+Retail360 is a Salesforce-based retail management platform designed to centralize customer, store, and sales workflows for a business operating multiple stores.
 
-Before you start, make sure you have:
+The project applies a structured process from requirements to development:
 
-- **Salesforce CLI** - Download from [developer.salesforce.com/tools/salesforcecli](https://developer.salesforce.com/tools/salesforcecli). See [Install Salesforce CLI](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_install_cli.htm) for details.
-- **VS Code with Salesforce Extension Pack** - See [Installation Instructions](https://developer.salesforce.com/docs/platform/sfvscode-extensions/guide/install.html) for details. Includes the Agentforce Vibes extension.
-- **A development org** - Sign up for a free Developer Edition org [here](https://developer.salesforce.com/signup).
-- **Dev Hub enabled** (optional, required to create scratch orgs) - You can enable Dev Hub in your development org under Setup > Dev Hub.  See [Provide Developers Access to Salesforce DX Tools](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_setup_dx_tools.htm).
+- Business analysis and user stories
+- Data modeling
+- Layered Apex architecture
+- Lightning Web Components
+- Declarative automation with Flow
+- Role-based security
+- Git-based workflow with Pull Requests
 
-## Project Structure
+## Business context
 
-Your DX project follows this structure:
+A fictional multi-store retail company needs to centralize:
+- Customer information, currently dispersed
+- Store performance visibility
+- Sales rep activity tracking
+- Customer visit follow-up
 
-- **`force-app/main/default/`** - Your metadata source files live in this default package directory. You can configure additional package directories in the `sfdx-project.json` file.
-- **`config/`** - Scratch org definitions and project settings
-- **`scripts/`** - Automation scripts for common tasks
-- **`sfdx-project.json`** - Project manifest that defines package directories, namespace, API version, and other project-level settings
+Retail360 addresses this across three domains: **Customer Management**, **Store Management**, and **Sales Management**.
 
-See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm).
+## Architecture
 
-## Get Started
+```
+Lightning Web Components
+          |
+          v
+   Apex Controller & Services
+          |
+          v
+     Salesforce Data (SOQL / DML)
+          ^
+          |
+     Salesforce Flow
+```
 
-Ready to start developing? The [Get Started with Salesforce DX](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_get_started_dx.htm) guide walks you through your first project, from creating a scratch org to creating a simple Apex class or LWC to deploying your code to a sandbox.
+The Apex layer follows a strict separation of concerns:
 
-## Common Salesforce CLI Commands
+```
+Trigger -> Trigger Handler -> Service Layer -> Selector -> Salesforce Database
+```
 
-Here are common CLI commands that you'll use the most:
+- **Trigger Handler** — manages trigger context, delegates processing
+- **Service** — contains business rules
+- **Selector** — centralizes SOQL queries
 
-- `sf org login web`: Authorize an org
-- `sf org open`: Open your org in a browser
-- `sf org create scratch`: Create a scratch org
-- `sf project deploy start`: Deploy metadata to your org
-- `sf project retrieve start`: Retrieve metadata from your org
-- `sf template generate <artifact>`: Scaffold new components, such as Apex classes and triggers, LWC components, Lightning apps, and more
-- `sf apex <command>`: Run Apex tests, run anonymous Apex blocks, and view logs
-- `sf data <command>`: Work with test data
-- `sf alias <command>`: Manage org aliases
-- `sf config <command>`: Configure CLI settings
+## Features
 
-## Use Agentforce Vibes to Build Lightning Apps
+- **Customer 360** — unified view of a customer: visits, purchases, opportunities, tasks, cases
+- **Store performance dashboard** — revenue, customers, visits, conversion rate, target progress, top stores/reps
+- **Customer Visit tracking** — check-in/check-out, purchase flag, automated follow-up tasks
+- **Salesforce Flow automation**:
+  - Visit follow-up flow (creates a task when no purchase was made)
+  - Recommendation notification flow (confidence ≥ 80%)
+  - Opportunity approval flow (manager approval above a threshold)
+- **Role-based security** — Permission Sets for Admin, Manager, Sales Rep, Read Only, following least privilege
 
-Transform your ideas into custom Lightning apps that extend CRM workflows directly in Lightning Experience. Through natural conversations with Agentforce Vibes, implement custom objects and fields, complex business logic, and dynamic UI components. See [Build a Lightning App Using Agentforce Vibes](https://developer.salesforce.com/docs/platform/einstein-for-devs/guide/lexapp-overview.html).
+## Data model
 
-## Additional Resources
+| Object | Description |
+|---|---|
+| `Store__c` | A retail store |
+| `CustomerVisit__c` | A recorded customer visit |
+| `Recommendation__c` | A product recommendation |
+| `SalesRepPerformance__c` | Sales rep performance metrics |
 
-- [Agentforce Vibes Developer Guide](https://developer.salesforce.com/docs/platform/einstein-for-devs/guide/einstein-overview.html)
-- [Salesforce CLI Installation Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/)
-- [Salesforce CLI Plugin Development Guide](https://developer.salesforce.com/docs/platform/salesforce-cli-plugin/guide/conceptual-overview.html)
-- [Salesforce VS Code Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
+Plus standard objects: `Account`, `Contact`, `Product2`, `Opportunity`, `Case`, `Task`, `User`.
 
-# retail360-salesforce
+## Technology stack
+
+| Technology | Purpose |
+|---|---|
+| Salesforce Platform | CRM, data, security, automation |
+| Apex | Server-side business logic |
+| Lightning Web Components | Modern UI |
+| SOQL | Data queries |
+| Salesforce Flow | Declarative automation |
+| Salesforce CLI / DX | Source-driven project management |
+| Git / GitHub | Version control and collaboration |
+
+## Development workflow
+
+```
+User Story -> Git Branch -> Development -> Local Tests -> Pull Request
+   -> Code Review -> Integration -> Release
+```
+
+Commit convention: `feat:`, `fix:`, `refactor:`, `docs:`
+
+## Environments
+
+`Development -> Integration -> UAT -> Staging -> Production`
+
+## Project structure
+
+```
+retail360-salesforce/
+├── force-app/
+│   └── main/default/
+│       ├── classes/
+│       ├── triggers/
+│       ├── lwc/
+│       ├── flows/
+│       ├── objects/
+│       ├── permissionsets/
+│       └── layouts/
+├── config/
+├── scripts/
+├── docs/
+│   ├── architecture/
+│   └── screenshots/
+├── sfdx-project.json
+└── README.md
+```
+
+## Roadmap — next steps
+
+- REST API to expose customer data
+- Automated Apex tests (unit, negative, bulk)
+- CI/CD pipeline with GitHub Actions
+- Recommendation engine logic
+
+## Documentation
+
+Architecture diagrams and screenshots are available in [`/docs`](./docs).

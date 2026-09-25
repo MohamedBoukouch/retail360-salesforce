@@ -1,7 +1,11 @@
 public with sharing class CustomerVisitController {
     public class VisitFormWrapper {
         @AuraEnabled
+        public Id storeId;
+        @AuraEnabled
         public String storeName;
+        @AuraEnabled
+        public Id customerId;
         @AuraEnabled
         public String customerName;
         @AuraEnabled
@@ -29,6 +33,8 @@ public with sharing class CustomerVisitController {
 
         CustomerVisit__c visit = visits[0];
         VisitFormWrapper wrapper = new VisitFormWrapper();
+        wrapper.storeId = visit.Store__c;
+        wrapper.customerId = visit.Customer__c;
         wrapper.checkIn = visit.Check_In__c;
         wrapper.checkOut = visit.Check_Out__c;
         wrapper.duration = visit.Duration__c;
@@ -48,11 +54,50 @@ public with sharing class CustomerVisitController {
         return wrapper;
     }
 
+    @AuraEnabled(cacheable=true)
+    public static List<Store__c> searchStores(String searchTerm) {
+        if (searchTerm == null || searchTerm == '') {
+            return [
+                SELECT Id, Name FROM Store__c
+                WHERE Status__c = 'ACTIVE'
+                ORDER BY Name ASC
+                LIMIT 10
+            ];
+        }
+        return [
+            SELECT Id, Name FROM Store__c
+            WHERE Name LIKE :('%' + searchTerm + '%')
+            AND Status__c = 'ACTIVE'
+            ORDER BY Name ASC
+            LIMIT 10
+        ];
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Contact> searchCustomers(String searchTerm) {
+        if (searchTerm == null || searchTerm == '') {
+            return [
+                SELECT Id, Name FROM Contact
+                ORDER BY Name ASC
+                LIMIT 10
+            ];
+        }
+        return [
+            SELECT Id, Name FROM Contact
+            WHERE Name LIKE :('%' + searchTerm + '%')
+            ORDER BY Name ASC
+            LIMIT 10
+        ];
+    }
+
     @AuraEnabled
-    public static Id saveVisit(Id visitId, Datetime checkIn, Datetime checkOut,
+    public static Id saveVisit(Id visitId, Id storeId, Id customerId,
+            Datetime checkIn, Datetime checkOut,
             Decimal duration, Boolean purchaseMade, String visitStatus) {
         CustomerVisit__c visit = new CustomerVisit__c(
             Id = visitId,
+            Store__c = storeId,
+            Customer__c = customerId,
             Check_In__c = checkIn,
             Check_Out__c = checkOut,
             Duration__c = duration,

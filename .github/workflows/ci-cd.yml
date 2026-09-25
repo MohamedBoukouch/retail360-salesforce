@@ -1,0 +1,141 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  DEFAULT_BRANCH: main
+
+jobs:
+  lint-and-format:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Prettier Check
+        run: npm run prettier:verify
+
+      - name: Run ESLint
+        run: npm run lint
+
+  lwc-jest:
+    name: LWC Jest Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run LWC Jest Tests
+        run: npm run test:unit:coverage
+
+  test-scratch-org:
+    name: Test in Scratch Org
+    runs-on: ubuntu-latest
+    needs: [lint-and-format, lwc-jest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Setup SFDX CLI
+        uses: salesforcecli/setup-salesforce-cli@v2
+
+      - name: Authenticate to Dev Hub
+        uses: salesforcecli/github-action-authenticate@v2
+        with:
+          dev-hub-key: ${{ secrets.DEV_HUB_KEY }}
+          alias: devhub
+
+      - name: Create Scratch Org
+        run: |
+          sfdx force:org:create -f config/project-scratch-def.json -a ci-org --set-default -d 7
+          sfdx force:source:deploy --sourcepath force-app --wait 10
+
+      - name: Run Apex Tests
+        run: |
+          sfdx apex run test --test-level RunLocalTests --code-coverage --result-format human --wait 10
+
+      - name: Delete Scratch Org
+        if: always()
+        run: sfdx force:org:delete -u ci-org --pseudonym --wait 10
+
+  deploy-sandbox:
+    name: Deploy to Sandbox
+    runs-on: ubuntu-latest
+    needs: [lint-and-format, lwc-jest, test-scratch-org]
+    if: github.ref == 'refs/heads/develop'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SFDX CLI
+        uses: salesforcecli/setup-salesforce-cli@v2
+
+      - name: Authenticate to Sandbox
+        uses: salesforcecli/github-action-authenticate@v2
+        with:
+          sf-login-url: ${{ secrets.SF_LOGIN_URL }}
+          sf-auth-key-json: ${{ secrets.SF_AUTH_KEY_JSON }}
+          alias: sandbox
+
+      - name: Deploy Metadata
+        run: sfdx force:source:deploy --sourcepath force-app --wait 10 --target-org sandbox
+
+      - name: Run Apex Tests
+        run: sfdx apex run test --test-level RunLocalTests --code-coverage --result-format human --wait 10 --target-org sandbox
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [lint-and-format, lwc-jest, test-scratch-org]
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SFDX CLI
+        uses: salesforcecli/setup-salesforce-cli@v2
+
+      - name: Authenticate to Production
+        uses: salesforcecli/github-action-authenticate@v2
+        with:
+          sf-login-url: ${{ secrets.SF_LOGIN_URL }}
+          sf-auth-key-json: ${{ secrets.SF_AUTH_KEY_JSON }}
+          alias: prod
+
+      - name: Deploy Metadata
+        run: sfdx force:source:deploy --sourcepath force-app --wait 10 --target-org prod

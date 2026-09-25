@@ -1,0 +1,24 @@
+{
+  "orgName": "Retail360",
+  "edition": "Developer",
+  "language": "en_US",
+  "country": "US",
+  "features": ["EnableSetPasswordInApi", "LightningExperience"],
+  "hasProductionNamespace": false,
+  "sfdx-project-sandbox-id": "000000000000000",
+  "sandboxId": "000000000000000",
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "mobileSettings": {
+      "enableS1EncryptedStoragePref2": false
+    },
+    "securitySettings": {
+      "passwordPolicies": {
+        "complexity": "Minimum",
+        "passwordLength": 8
+      }
+    }
+  }
+}
